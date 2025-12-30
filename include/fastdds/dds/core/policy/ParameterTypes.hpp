@@ -175,6 +175,13 @@ enum ParameterId_t : uint16_t
     PID_NETWORK_CONFIGURATION_SET           = 0x8007,
     PID_CUSTOM_RELATED_SAMPLE_IDENTITY      = 0x800f,
     PID_RTPS_ENDPOINT                       = 0x8010,
+
+    /* Vendor-specific: RTI
+     * 
+     * from: https://gitlab.com/wireshark/wireshark/-/blob/master/epan/dissectors/packet-rtps.c
+     */
+    PID_ROLE_NAME                           = 0x800a,
+
     /* Writer specific */
     PID_WRITER_DATA_LIFECYCLE               = 0x8100,
     PID_PUBLISH_MODE                        = 0x8101,
