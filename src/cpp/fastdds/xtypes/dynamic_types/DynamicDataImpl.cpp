@@ -282,6 +282,63 @@ ReturnCode_t DynamicDataImpl::clear_value(
     return ret_val;
 }
 
+ReturnCode_t DynamicDataImpl::remove_all_optional_values() noexcept
+{
+    ReturnCode_t ret_val = RETCODE_OK;
+    TypeKind type_kind = enclosing_type_->get_kind();
+
+    if (TK_STRUCTURE == type_kind)
+    {
+        for (auto& member : enclosing_type_->get_all_members_by_index())
+        {
+            if (member->get_descriptor().is_optional())
+            {
+                auto it_value = value_.find(member->get_id());
+                if (it_value != value_.end())
+                {
+                    value_.erase(it_value);
+                }
+            }
+        }
+    }
+
+    return ret_val;
+}
+
+ReturnCode_t DynamicDataImpl::remove_optional_value(
+    MemberId id) noexcept
+{
+    ReturnCode_t ret_val = RETCODE_BAD_PARAMETER;
+    TypeKind type_kind = enclosing_type_->get_kind();
+
+    if (TK_STRUCTURE == type_kind)
+    {
+        const auto& members = enclosing_type_->get_all_members();
+        auto it_value = value_.find(id);
+        const auto it = members.find(id);
+
+        if (it_value != value_.end() &&
+            it != members.end())
+        {
+            auto member = traits<DynamicTypeMember>::narrow<DynamicTypeMemberImpl>(it->second);
+
+            if (member->get_descriptor().is_optional())
+            {
+                value_.erase(it_value);
+
+                ret_val = RETCODE_OK;
+            }
+        }
+    }
+
+    return ret_val;
+}
+
+bool DynamicDataImpl::has_value_by_id(MemberId id)
+{
+    return value_.find(id) != value_.end();
+}
+
 traits<DynamicData>::ref_type DynamicDataImpl::clone() noexcept
 {
     traits<DynamicDataImpl>::ref_type ret_value = std::make_shared<DynamicDataImpl>();
@@ -759,7 +816,35 @@ ReturnCode_t DynamicDataImpl::get_complex_value(
                 }
                 else
                 {
-                    EPROSIMA_LOG_ERROR(DYN_TYPES, "Error getting complex value. MemberId not found.");
+                    if (TK_STRUCTURE == type_kind)
+                    {
+                        const auto& members = enclosing_type_->get_all_members();
+                        const auto it_member = members.find(id);
+                        bool isOptionalMember = false;
+
+                        if (it_member != members.end())
+                        {
+                            auto member = traits<DynamicTypeMember>::narrow<DynamicTypeMemberImpl>(it_member->second);
+
+                            if (member->get_descriptor().is_optional())
+                            {
+                                isOptionalMember = true;
+                            }
+                        }
+
+                        if (isOptionalMember)
+                        {
+                            EPROSIMA_LOG_WARNING(DYN_TYPES, "Cannot get complex value. Optional member value did not assigned getting complex value.");
+                        }
+                        else
+                        {
+                            EPROSIMA_LOG_ERROR(DYN_TYPES, "Error getting complex value. MemberId not found.");
+                        }
+                    }
+                    else
+                    {
+                        EPROSIMA_LOG_ERROR(DYN_TYPES, "Error getting complex value. MemberId not found.");
+                    }
                 }
             }
         }
@@ -1290,6 +1375,25 @@ ReturnCode_t DynamicDataImpl::set_complex_value(
                     else
                     {
                         EPROSIMA_LOG_ERROR(DYN_TYPES, "Error setting due to the fact that types are different.");
+                    }
+                }
+                else if (TK_STRUCTURE == type_kind)
+                {
+                    // insert new value to optional member
+                    traits<DynamicTypeMember>::ref_type member;
+                    traits<MemberDescriptor>::ref_type memberDesc{ traits<MemberDescriptor>::make_shared() };
+
+                    if (enclosing_type_->get_member(member, id) == RETCODE_OK &&
+                        member->get_descriptor(memberDesc) == RETCODE_OK &&
+                        memberDesc->is_optional() &&
+                        memberDesc->type()->equals(value->type()))
+                    {
+                        value_.emplace(id, value->clone());
+                        ret_value = RETCODE_OK;
+                    }
+                    else
+                    {
+                        EPROSIMA_LOG_ERROR(DYN_TYPES, "Error setting complex value. MemberId not found.");
                     }
                 }
                 else
@@ -7245,7 +7349,7 @@ void DynamicDataImpl::serialize(
 
                     cdr << eprosima::fastcdr::MemberId{member->get_id()} << member_data;
                 }
-                else
+                else if (!member->get_descriptor().is_optional())
                 {
                     EPROSIMA_LOG_ERROR(DYN_TYPES,
                             "Error serializing structure member because it is not found on DynamicData");

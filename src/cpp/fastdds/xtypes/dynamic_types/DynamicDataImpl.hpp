@@ -77,6 +77,13 @@ public:
     ReturnCode_t clear_value(
             MemberId id) noexcept override;
 
+    ReturnCode_t remove_all_optional_values() noexcept override;
+
+    ReturnCode_t remove_optional_value(
+        MemberId id) noexcept override;
+
+    bool has_value_by_id(MemberId id) override;
+
     traits<DynamicData>::ref_type clone() noexcept override;
 
     bool equals(

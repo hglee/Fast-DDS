@@ -141,6 +141,31 @@ public:
             MemberId id) = 0;
 
     /*!
+     * Removes all optional members in structure.
+     * @return @ref ReturnCode_t
+     * @retval RETCODE_OK when the removing was successful.
+     */
+    FASTDDS_EXPORTED_API virtual ReturnCode_t remove_all_optional_values() = 0;
+
+    /*!
+     * Removes optional member in structure.
+     * @param id Identifier of the member to remove.
+     * @return @ref ReturnCode_t
+     * @retval RETCODE_OK when the removing was successful.
+     * @retval RETCODE_BAD_PARAMETER when the @ref MemberId is invalid.
+     */
+    FASTDDS_EXPORTED_API virtual ReturnCode_t remove_optional_value(
+        MemberId id) = 0;
+
+    /*!
+	 * Check value existence by id.
+     * @param id Identifier of the member to check.
+	 * @return `true` when the member exists.
+     */
+    FASTDDS_EXPORTED_API virtual bool has_value_by_id(
+        MemberId id) = 0;
+
+    /*!
      * \b Loans a @ref DynamicData reference within the sample
      * @remarks This loan shall be returned by the @ref DynamicData::return_loaned_value operation
      * @param [in] id identifier of the object to retrieve
