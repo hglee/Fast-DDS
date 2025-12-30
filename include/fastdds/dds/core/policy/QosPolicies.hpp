@@ -270,7 +270,7 @@ typedef enum DurabilityQosPolicyKind : fastdds::rtps::octet
 #define PARAMETER_BOOL_LENGTH 4
 
 /**
- * This policy expresses if the data should ‚Äòoutlive‚Äô their writing time.
+ * This policy expresses if the data should °Æoutlive°Ø their writing time.
  *
  * @note Immutable Qos Policy
  */
@@ -473,8 +473,8 @@ typedef enum LivelinessQosPolicyKind : fastdds::rtps::octet
 } LivelinessQosPolicyKind;
 
 /**
- * Determines the mechanism and parameters used by the application to determine whether an Entity is ‚Äúactive‚Äù (alive).
- * The ‚Äúliveliness‚Äù status of an Entity is used to maintain instance ownership in combination with the setting of the
+ * Determines the mechanism and parameters used by the application to determine whether an Entity is °∞active°± (alive).
+ * The °∞liveliness°± status of an Entity is used to maintain instance ownership in combination with the setting of the
  * OwnershipQosPolicy.
  * The application is also informed via listener when an Entity is no longer alive.
  *
@@ -631,13 +631,13 @@ enum OwnershipQosPolicyKind : fastdds::rtps::octet
 {
     /**
      * Indicates shared ownership for each instance. Multiple writers are allowed to update the same instance and all the
-     * updates are made available to the readers. In other words there is no concept of an ‚Äúowner‚Äù for the instances.
+     * updates are made available to the readers. In other words there is no concept of an °∞owner°± for the instances.
      */
     SHARED_OWNERSHIP_QOS,
     /**
      * Indicates each instance can only be owned by one DataWriter, but the owner of an instance can change dynamically.
      * The selection of the owner is controlled by the setting of the OwnershipStrengthQosPolicy. The owner is always set
-     * to be the highest-strength DataWriter object among the ones currently ‚Äúactive‚Äù (as determined by the LivelinessQosPolicy).
+     * to be the highest-strength DataWriter object among the ones currently °∞active°± (as determined by the LivelinessQosPolicy).
      */
     EXCLUSIVE_OWNERSHIP_QOS
 };
@@ -1165,7 +1165,7 @@ enum PresentationQosPolicyAccessScopeKind : fastdds::rtps::octet
 
 /**
  * Specifies how the samples representing changes to data instances are presented to the subscribing application.
- * This policy affects the application‚Äôs ability to specify and receive coherent changes and to see the relative
+ * This policy affects the application°Øs ability to specify and receive coherent changes and to see the relative
  * order of changes.access_scope determines the largest scope spanning the entities for which the order and coherency
  * of changes can be preserved. The two booleans control whether coherent access and ordered access are supported within
  * the scope access_scope.
@@ -1642,17 +1642,17 @@ private:
 enum HistoryQosPolicyKind : fastdds::rtps::octet
 {
     /**
-     * On the publishing side, the Service will only attempt to keep the most recent ‚Äúdepth‚Äù samples of each instance
+     * On the publishing side, the Service will only attempt to keep the most recent °∞depth°± samples of each instance
      * of data (identified by its key) managed by the DataWriter. On the subscribing side, the DataReader will only attempt
-     * to keep the most recent ‚Äúdepth‚Äù samples received for each instance (identified by its key) until the application
-     * ‚Äútakes‚Äù them via the DataReader‚Äôs take operation.
+     * to keep the most recent °∞depth°± samples received for each instance (identified by its key) until the application
+     * °∞takes°± them via the DataReader°Øs take operation.
      */
     KEEP_LAST_HISTORY_QOS,
     /**
      * On the publishing side, the Service will attempt to keep all samples (representing each value written) of each
      * instance of data (identified by its key) managed by the DataWriter until they can be delivered to all subscribers.
      * On the subscribing side, the Service will attempt to keep all samples of each instance of data (identified by its
-     * key) managed by the DataReader. These samples are kept until the application ‚Äútakes‚Äù them from the Service via the
+     * key) managed by the DataReader. These samples are kept until the application °∞takes°± them from the Service via the
      * take operation.
      */
     KEEP_ALL_HISTORY_QOS
@@ -1665,7 +1665,7 @@ enum HistoryQosPolicyKind : fastdds::rtps::octet
  * On the publishing side this policy controls the samples that should be maintained by the DataWriter on behalf of
  * existing DataReader entities. The behavior with regards to a DataReaderentities discovered after a sample is written
  * is controlled by the DURABILITY QoS policy. On the subscribing side it controls the samples that should be maintained
- * until the application ‚Äútakes‚Äù them from the Service.
+ * until the application °∞takes°± them from the Service.
  *
  * @note Immutable Qos Policy
  */
@@ -1935,7 +1935,7 @@ public:
 };
 
 /**
- * Specifies the value of the ‚Äústrength‚Äù used to arbitrate among multiple DataWriter objects that attempt to modify the same
+ * Specifies the value of the °∞strength°± used to arbitrate among multiple DataWriter objects that attempt to modify the same
  * instance of a data-object (identified by Topic + key).This policy only applies if the OWNERSHIP QoS policy is of kind
  * EXCLUSIVE.
  *
@@ -2083,7 +2083,7 @@ constexpr DataRepresentationId_t DEFAULT_DATA_REPRESENTATION {DataRepresentation
  * DataReaders must be able to negotiate which data representation(s) to use. This negotiation shall occur based on
  * DataRepresentationQosPolicy.
  *
- * @warning If a writer‚Äôs offered representation is contained within a reader‚Äôs sequence, the offer satisfies the
+ * @warning If a writer°Øs offered representation is contained within a reader°Øs sequence, the offer satisfies the
  * request and the policies are compatible. Otherwise, they are incompatible.
  *
  * @note Immutable Qos Policy
@@ -2139,7 +2139,7 @@ enum TypeConsistencyKind : uint16_t
     DISALLOW_TYPE_COERCION,
     /**
      * The DataWriter and the DataReader need not support the same data type in order for them to communicate as long as
-     * the reader‚Äôs type is assignable from the writer‚Äôs type.
+     * the reader°Øs type is assignable from the writer°Øs type.
      */
     ALLOW_TYPE_COERCION
 };

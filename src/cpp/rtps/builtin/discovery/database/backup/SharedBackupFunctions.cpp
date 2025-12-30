@@ -80,7 +80,7 @@ void from_json(
 }
 
 // stack overflow
-// @polfosol-ఠ-ఠ
+// @polfosol
 // https://stackoverflow.com/questions/180947/base64-decode-snippet-in-c/37109258#37109258
 
 // Array to convert binary to b64

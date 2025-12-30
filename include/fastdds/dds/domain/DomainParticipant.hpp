@@ -554,7 +554,7 @@ public:
     FASTDDS_EXPORTED_API DomainId_t get_domain_id() const;
 
     /**
-     * Deletes all the entities that were created by means of the ‚Äúcreate‚Äù methods
+     * Deletes all the entities that were created by means of the °∞create°± methods
      *
      * @return RETURN_OK code if everything correct, error code otherwise
      */

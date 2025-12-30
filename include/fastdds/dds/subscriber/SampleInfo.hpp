@@ -36,7 +36,7 @@ namespace fastdds {
 namespace dds {
 
 /*!
- * @brief SampleInfo is the information that accompanies each sample that is â€˜readâ€™ or â€˜taken.â€™
+ * @brief SampleInfo is the information that accompanies each sample that is ¡®read¡¯ or ¡®taken.¡¯
  */
 struct SampleInfo
 {
