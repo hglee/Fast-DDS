@@ -29,6 +29,18 @@ namespace eprosima {
 namespace fastdds {
 namespace dds {
 
+// @todo move to other place
+fastdds::rtps::VendorId_t ParameterVendorId_t::defaultVendorId = fastdds::rtps::c_VendorId_eProsima;
+
+fastdds::rtps::VendorId_t ParameterVendorId_t::getDefaultVendorId()
+{
+    return defaultVendorId;
+}
+
+void ParameterVendorId_t::setDefaultVendorId(fastdds::rtps::VendorId_t vendor_id)
+{
+    defaultVendorId = vendor_id;
+}
 
 bool ParameterList::writeEncapsulationToCDRMsg(
         rtps::CDRMessage_t* msg)

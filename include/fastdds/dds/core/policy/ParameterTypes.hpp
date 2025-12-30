@@ -623,7 +623,6 @@ public:
 class ParameterVendorId_t : public Parameter_t
 {
 public:
-
     //!Vendor Id. <br> By default, c_VendorId_eProsima.
     fastdds::rtps::VendorId_t vendorId;
 
@@ -631,7 +630,7 @@ public:
      * @brief Constructor without parameters
      */
     ParameterVendorId_t()
-        : vendorId(fastdds::rtps::c_VendorId_eProsima)
+        : vendorId(getDefaultVendorId())
     {
     }
 
@@ -645,10 +644,25 @@ public:
             ParameterId_t pid,
             uint16_t in_length)
         : Parameter_t(pid, in_length)
-        , vendorId(fastdds::rtps::c_VendorId_eProsima)
+        , vendorId(getDefaultVendorId())
     {
     }
 
+    /**
+     * Gets the default vendor id
+     * @return Default vendor id.
+     */
+    static FASTDDS_EXPORTED_API fastdds::rtps::VendorId_t getDefaultVendorId();
+
+    /**
+     * Sets the default vendor id
+     * @param vendor_id New default vendor id.
+     */
+    static FASTDDS_EXPORTED_API void setDefaultVendorId(fastdds::rtps::VendorId_t vendor_id);
+
+private:
+    //!Default Vendor Id
+    static fastdds::rtps::VendorId_t defaultVendorId;
 };
 
 #define PARAMETER_VENDOR_LENGTH 4
