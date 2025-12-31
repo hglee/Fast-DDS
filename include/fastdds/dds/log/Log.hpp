@@ -309,7 +309,7 @@ protected:
     } while (0)
 #else
 
-#define EPROSIMA_LOG_ERROR_IMPL_(cat, msg)
+#define EPROSIMA_LOG_ERROR_IMPL_(cat, msg) do { } while (0)
 
 #endif // ifndef LOG_NO_ERROR
 
@@ -344,7 +344,7 @@ protected:
 
 #else
 
-#define EPROSIMA_LOG_WARNING_IMPL_(cat, msg)
+#define EPROSIMA_LOG_WARNING_IMPL_(cat, msg) do { } while (0)
 
 #endif // ifndef LOG_NO_WARNING
 
@@ -383,7 +383,7 @@ protected:
 
 #else
 
-#define EPROSIMA_LOG_INFO_IMPL_(cat, msg)
+#define EPROSIMA_LOG_INFO_IMPL_(cat, msg) do { } while (0)
 
 #endif // ifndef LOG_NO_INFO
 
