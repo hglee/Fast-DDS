@@ -2289,6 +2289,8 @@ ReturnCode_t DataReaderImpl::get_subscription_builtin_topic_data(
     subscription_data.destination_order = qos_.destination_order();
     subscription_data.user_data = qos_.user_data();
     subscription_data.time_based_filter = qos_.time_based_filter();
+    subscription_data.entity_name = qos_.entity_name();
+    subscription_data.role_name = qos_.role_name();
 
     // Subscriber qos
     subscription_data.presentation = subscriber_->qos_.presentation();

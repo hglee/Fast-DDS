@@ -78,7 +78,9 @@ public:
                (this->reliable_writer_qos_ == b.reliable_writer_qos()) &&
                (this->endpoint_ == b.endpoint()) &&
                (this->writer_resource_limits_ == b.writer_resource_limits()) &&
-               (this->data_sharing_ == b.data_sharing());
+               (this->data_sharing_ == b.data_sharing()) &&
+               (this->entity_name_ == b.entity_name()) &&
+               (this->role_name_ == b.role_name());
     }
 
     FASTDDS_EXPORTED_API WriterQos get_writerqos(
@@ -766,6 +768,48 @@ public:
         data_sharing_ = data_sharing;
     }
 
+    /**
+     * Getter for extra entity name
+     * 
+     * @return entity name reference
+     */
+    FASTDDS_EXPORTED_API const fastcdr::string_255& entity_name() const
+    {
+        return entity_name_;
+    }
+
+    /**
+     * Setter for extra entity name
+     * 
+     * @param entity_name new value for the entity name
+     */
+    FASTDDS_EXPORTED_API void entity_name(
+        const fastcdr::string_255& entity_name)
+    {
+        entity_name_ = entity_name;
+    }
+
+    /**
+     * Getter for extra role name
+     * 
+     * @return role name reference
+     */
+    FASTDDS_EXPORTED_API const fastcdr::string_255& role_name() const
+    {
+        return role_name_;
+    }
+
+    /**
+     * Setter for extra role name
+     * 
+     * @param role_name new value for the role name
+     */
+    FASTDDS_EXPORTED_API void role_name(
+        const fastcdr::string_255& role_name)
+    {
+        role_name_ = role_name;
+    }
+
 private:
 
     //!Durability Qos, implemented in the library.
@@ -833,6 +877,12 @@ private:
 
     //!DataSharing configuration
     DataSharingQosPolicy data_sharing_;
+
+    //!Extra entity name
+    fastcdr::string_255 entity_name_;
+
+    //!Extra role name
+    fastcdr::string_255 role_name_;
 };
 
 FASTDDS_EXPORTED_API extern const DataWriterQos DATAWRITER_QOS_DEFAULT;

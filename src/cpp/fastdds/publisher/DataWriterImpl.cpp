@@ -1826,6 +1826,8 @@ ReturnCode_t DataWriterImpl::get_publication_builtin_topic_data(
     publication_data.ownership = qos_.ownership();
     publication_data.ownership_strength = qos_.ownership_strength();
     publication_data.destination_order = qos_.destination_order();
+    publication_data.entity_name = qos_.entity_name();
+    publication_data.role_name = qos_.role_name();
 
     // Publisher qos
     publication_data.presentation = publisher_->qos_.presentation();

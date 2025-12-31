@@ -103,6 +103,12 @@ struct PublicationBuiltinTopicData
     /// Destination Order Qos, NOT implemented in the library.
     dds::DestinationOrderQosPolicy destination_order;
 
+    /// Extra entity name
+    fastcdr::string_255 entity_name;
+
+    /// Extra role name
+    fastcdr::string_255 role_name;
+
     // Publisher Qos
 
     /// Presentation Qos, NOT implemented in the library.

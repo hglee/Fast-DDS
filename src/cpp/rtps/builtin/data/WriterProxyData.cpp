@@ -295,6 +295,17 @@ uint32_t WriterProxyData::get_serialized_size(
         ret_val += dds::QosPoliciesSerializer<dds::DestinationOrderQosPolicy>::cdr_serialized_size(
             destination_order);
     }
+    if (ParameterVendorId_t::getDefaultVendorId() != c_VendorId_eProsima)
+    {
+        if (entity_name.size() > 0)
+        {
+            ret_val += dds::ParameterSerializer<Parameter_t>::cdr_serialized_size(entity_name);
+        }
+        if (role_name.size() > 0)
+        {
+            ret_val += dds::ParameterSerializer<Parameter_t>::cdr_serialized_size(role_name);
+        }
+    }
     if (dds::QosPoliciesSerializer<dds::PresentationQosPolicy>::should_be_sent(presentation))
     {
         ret_val +=
@@ -595,6 +606,29 @@ bool WriterProxyData::write_to_cdr_message(
                     destination_order, msg))
         {
             return false;
+        }
+    }
+    if (ParameterVendorId_t::getDefaultVendorId() != c_VendorId_eProsima)
+    {
+        {
+            if (entity_name.size() > 0)
+            {
+                ParameterString_t p(fastdds::dds::PID_ENTITY_NAME, 0, entity_name);
+                if (!dds::ParameterSerializer<ParameterString_t>::add_to_cdr_message(p, msg))
+                {
+                    return false;
+                }
+            }
+        }
+        {
+            if (role_name.size() > 0)
+            {
+                ParameterString_t p(fastdds::dds::PID_ROLE_NAME, 0, role_name);
+                if (!dds::ParameterSerializer<ParameterString_t>::add_to_cdr_message(p, msg))
+                {
+                    return false;
+                }
+            }
         }
     }
     if (dds::QosPoliciesSerializer<dds::PresentationQosPolicy>::should_be_sent(presentation))
@@ -1422,6 +1456,28 @@ bool WriterProxyData::read_from_cdr_message(
                         }
                         break;
                     }
+                    case fastdds::dds::PID_ENTITY_NAME:
+                    {
+                        ParameterString_t p(pid, plength);
+                        if (!dds::ParameterSerializer<ParameterString_t>::read_from_cdr_message(p, msg, plength))
+                        {
+                            return false;
+                        }
+
+                        entity_name = p.getName();
+                        break;
+                    }
+                    case fastdds::dds::PID_ROLE_NAME:
+                    {
+                        ParameterString_t p(pid, plength);
+                        if (!dds::ParameterSerializer<ParameterString_t>::read_from_cdr_message(p, msg, plength))
+                        {
+                            return false;
+                        }
+
+                        role_name = p.getName();
+                        break;
+                    }
 
                     default:
                     {
@@ -1542,6 +1598,14 @@ void WriterProxyData::set_qos(
     if (destination_order.kind != qos.destination_order.kind)
     {
         destination_order = qos.destination_order;
+    }
+    if (first_time)
+    {
+        entity_name = qos.entity_name;
+    }
+    if (first_time)
+    {
+        role_name = qos.role_name;
     }
     if (first_time || user_data.data_vec() != qos.user_data.data_vec())
     {
@@ -1804,6 +1868,8 @@ void WriterProxyData::clear()
     ownership.clear();
     ownership_strength.clear();
     destination_order.clear();
+    entity_name = "";
+    role_name = "";
     presentation.clear();
     partition.clear();
     topic_data.clear();

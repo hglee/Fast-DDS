@@ -100,6 +100,12 @@ struct SubscriptionBuiltinTopicData
     /// Time Based Filter Qos, NOT implemented in the library.
     dds::TimeBasedFilterQosPolicy time_based_filter;
 
+    /// Extra entity name
+    fastcdr::string_255 entity_name;
+
+    /// Extra role name
+    fastcdr::string_255 role_name;
+
     // Subscriber Qos
 
     /// Presentation Qos, NOT implemented in the library.
