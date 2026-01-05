@@ -547,6 +547,15 @@ ReturnCode_t DDSFilterFactory::create_content_filter(
         filter_instance = &empty_expression_;
         ret = RETCODE_OK;
     }
+    else if (filter_expression[0] == '@')
+    {
+        EPROSIMA_LOG_INFO(DDSSQLFILTER, "Skip unsupported RTI metadata style filter expression: " << filter_expression);
+
+        delete_content_filter(filter_class_name, filter_instance);
+        filter_instance = &empty_expression_;
+
+        // ret will be RETCODE_UNSUPPORTED
+    }
     else
     {
         std::shared_ptr<xtypes::TypeObject> type_object = get_complete_type_object(type_name, data_type);
