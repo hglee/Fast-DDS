@@ -6631,9 +6631,7 @@ bool DynamicDataImpl::deserialize(
                                 throw fastcdr::exception::BadParamException(
                                     "Member not found in DynamicTypeImpl");
                             }
-                            const auto id = member_impl->get_id();
-                            auto it = value_.find(id);
-
+                            auto it = value_.find(member_impl->get_id());
                             if (it != value_.end())
                             {
                                 member_data = std::static_pointer_cast<DynamicDataImpl>(it->second);
@@ -6644,7 +6642,7 @@ bool DynamicDataImpl::deserialize(
                                 traits<DynamicData>::narrow<DynamicDataImpl>(DynamicDataFactory::get_instance()
                                         ->create_data(
                                     member_impl->get_descriptor().type()));
-                                value_.emplace(id, member_data);
+                                value_.emplace(member_impl->get_id(), member_data);
                             }
 
                             dcdr >> member_data;

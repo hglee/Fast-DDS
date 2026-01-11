@@ -1,4 +1,4 @@
-// Copyright 2024 Proyectos y Sistemas de Mantenimiento SL (eProsima).
+// Copyright 2026 Proyectos y Sistemas de Mantenimiento SL (eProsima).
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,40 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <cstdint>
-#include <memory>
+#ifndef RTPS_PARTICIPANT__RTPS_PARTICIPANT_TYPES_HPP
+#define RTPS_PARTICIPANT__RTPS_PARTICIPANT_TYPES_HPP
 
-#include <openssl/crypto.h>
+#include "RTPSParticipantImpl.hpp"
 
 namespace eprosima {
 namespace fastdds {
 namespace rtps {
-namespace security {
 
-class OpenSSLInit
-{
-public:
+using RTPSParticipantImplType = RTPSParticipantImpl;
 
-    OpenSSLInit()
-    {
-        uint64_t opts = OPENSSL_INIT_NO_ATEXIT;
-        OPENSSL_init_crypto(opts, NULL);
-    }
-
-    ~OpenSSLInit()
-    {
-        OPENSSL_cleanup();
-    }
-
-    static std::shared_ptr<OpenSSLInit> get_instance()
-    {
-        static auto instance = std::make_shared<OpenSSLInit>();
-        return instance;
-    }
-
-};
-
-} // namespace security
 } // namespace rtps
 } // namespace fastdds
 } // namespace eprosima
+
+#endif // RTPS_PARTICIPANT__RTPS_PARTICIPANT_TYPES_HPP
