@@ -166,6 +166,8 @@ EVP_PKEY* Pkcs11Provider::load_private_key(
         SecurityException& exception)
 {
 #if defined(OPENSSL_NO_ENGINE)
+    static_cast<void>(certificate);
+    static_cast<void>(pkey);
     exception = initialization_exception_;
     return nullptr;
 #else
