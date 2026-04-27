@@ -562,7 +562,7 @@ private:
     static TypeKind get_enclosing_typekind(
             traits<DynamicTypeImpl>::ref_type type) noexcept;
 
-    template<TypeKind TK >
+    template<TypeKind TK>
     ReturnCode_t get_primitive_value(
             TypeKind element_kind,
             std::map<MemberId, std::shared_ptr<void>>::iterator value_iterator,
@@ -618,7 +618,7 @@ private:
             SequenceTypeForKind<TK>& value,
             size_t number_of_elements) noexcept;
 
-    template<TypeKind TK >
+    template<TypeKind TK>
     ReturnCode_t get_value(
             TypeForKind<TK>& value,
             MemberId id) noexcept;

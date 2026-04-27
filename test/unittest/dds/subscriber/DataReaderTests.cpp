@@ -2058,7 +2058,7 @@ TEST_F(DataReaderTests, sample_info)
 
 struct arraybuf : public std::streambuf
 {
-    template <std::size_t Size> arraybuf(
+    template<std::size_t Size> arraybuf(
             std::array<char, Size>& array)
     {
         this->setp(array.data(), array.data() + Size - 1);
@@ -2069,7 +2069,7 @@ struct arraybuf : public std::streambuf
 
 struct oarraystream : virtual arraybuf, std::ostream
 {
-    template <std::size_t Size> oarraystream(
+    template<std::size_t Size> oarraystream(
             std::array<char, Size>& array)
         : arraybuf(array)
         , std::ostream(this)
@@ -3901,51 +3901,34 @@ TEST_F(DataReaderTests, data_type_is_plain_data_representation)
     DomainParticipantFactory::get_instance()->delete_participant(participant);
 }
 
-TEST_F(DataReaderTests, set_related_datawriter)
+/**
+ * @test Tests that set_type_support_context returns RETCODE_OK on a disabled DataReader,
+ *       RETCODE_ILLEGAL_OPERATION on an enabled one
+ */
+TEST_F(DataReaderTests, set_type_support_context)
 {
-    create_entities();
+    // Create a disabled DataReader via subscriber QoS
+    SubscriberQos sub_qos = SUBSCRIBER_QOS_DEFAULT;
+    sub_qos.entity_factory().autoenable_created_entities = false;
 
-    ASSERT_TRUE(data_reader_->is_enabled());
-    ASSERT_EQ(RETCODE_ILLEGAL_OPERATION, data_reader_->set_related_datawriter(data_writer_));
+    create_entities(nullptr, DATAREADER_QOS_DEFAULT, sub_qos);
 
-    participant_->delete_contained_entities();
-    DomainParticipantFactory::get_instance()->delete_participant(participant_);
+    ASSERT_NE(data_reader_, nullptr);
+    EXPECT_FALSE(data_reader_->is_enabled());
 
-    SubscriberQos subscriber_qos;
-    subscriber_qos.entity_factory().autoenable_created_entities = false;
+    auto ctx = std::make_shared<TopicDataType::Context>();
 
-    create_entities(
-        nullptr,
-        DATAREADER_QOS_DEFAULT,
-        subscriber_qos
-        );
+    // Reader is disabled: any context (including null) must return RETCODE_OK
+    EXPECT_EQ(RETCODE_OK, data_reader_->set_type_support_context(ctx));
+    EXPECT_EQ(RETCODE_OK, data_reader_->set_type_support_context(nullptr));
 
-    ASSERT_FALSE(data_reader_->is_enabled());
-    ASSERT_EQ(RETCODE_BAD_PARAMETER, data_reader_->set_related_datawriter(nullptr));
+    // Enable the reader
+    ASSERT_EQ(RETCODE_OK, data_reader_->enable());
+    EXPECT_TRUE(data_reader_->is_enabled());
 
-    auto another_participant =
-            DomainParticipantFactory::get_instance()->create_participant(
-        (uint32_t)GET_PID() % 230, PARTICIPANT_QOS_DEFAULT);
-    ASSERT_NE(participant_, nullptr);
-
-    auto another_publisher = another_participant->create_publisher(PUBLISHER_QOS_DEFAULT);
-    ASSERT_NE(publisher_, nullptr);
-
-    type_.register_type(another_participant);
-
-    auto another_topic = another_participant->create_topic(topic_name, type_.get_type_name(), TOPIC_QOS_DEFAULT);
-    ASSERT_NE(topic_, nullptr);
-
-    auto another_dw = another_publisher->create_datawriter(another_topic, DATAWRITER_QOS_DEFAULT);
-    ASSERT_NE(another_dw, nullptr);
-
-    // Check that the DataReader can not be set to a DataWriter from another participant
-    ASSERT_EQ(RETCODE_PRECONDITION_NOT_MET, data_reader_->set_related_datawriter(another_dw));
-    // Check that setting a DataWriter from the same participant works
-    ASSERT_EQ(RETCODE_OK, data_reader_->set_related_datawriter(data_writer_));
-
-    another_participant->delete_contained_entities();
-    DomainParticipantFactory::get_instance()->delete_participant(another_participant);
+    // Reader is enabled: must return RETCODE_ILLEGAL_OPERATION
+    EXPECT_EQ(RETCODE_ILLEGAL_OPERATION, data_reader_->set_type_support_context(ctx));
+    EXPECT_EQ(RETCODE_ILLEGAL_OPERATION, data_reader_->set_type_support_context(nullptr));
 }
 
 int main(

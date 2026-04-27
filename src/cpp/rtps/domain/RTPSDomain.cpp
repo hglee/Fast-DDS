@@ -29,6 +29,7 @@
 
 #include <fastdds/dds/log/Log.hpp>
 #include <fastdds/LibrarySettings.hpp>
+#include <fastdds/log/LogResources.hpp>
 #include <fastdds/rtps/history/WriterHistory.hpp>
 #include <fastdds/rtps/participant/RTPSParticipant.hpp>
 #include <fastdds/rtps/reader/RTPSReader.hpp>
@@ -176,6 +177,11 @@ bool RTPSDomain::removeRTPSParticipant(
     }
     EPROSIMA_LOG_ERROR(RTPS_PARTICIPANT, "RTPSParticipant pointer is null");
     return false;
+}
+
+RTPSDomainImpl::RTPSDomainImpl()
+    : log_resources_(dds::detail::get_log_resources())
+{
 }
 
 void RTPSDomainImpl::stop_all()
@@ -735,7 +741,8 @@ bool RTPSDomainImpl::client_server_environment_attributes_override(
         else
         {
             // There is already a profile with the given name. Do not overwrite it
-            EPROSIMA_LOG_WARNING(RTPS_DOMAIN, "An XML profile for 'service' was found. When using ROS2_EASY_MODE, please ensure"
+            EPROSIMA_LOG_WARNING(RTPS_DOMAIN,
+                    "An XML profile for 'service' was found. When using ROS2_EASY_MODE, please ensure"
                     " the max_blocking_time is configured with a value higher than the default.");
         }
     }
